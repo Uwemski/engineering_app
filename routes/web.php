@@ -11,6 +11,19 @@ Route::get('/user-page', function () {
     return view('user-page');
 })->middleware('is_Admin');
 
+Route::get('/about', function() {
+    return view();
+});
+
+Route::get('/contact', function() {
+    return view();
+});
+
+//route for product page i.e a public catalogue. No middleware
+Route::get('/products', function() {
+    return view();
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
