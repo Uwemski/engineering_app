@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Middleware\AdminController;
 
 class AdminMiddleware
 {
@@ -15,7 +17,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        dd("Hello middleware");
-        return $next($request);
+        if(auth::check()){
+            return $next($request);
+        }
+        abort(401);
     }
 }
