@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\User;
+use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Order extends Model
 {
     //
-
     use HasFactory, Notifiable;
     /**
      * The attributes that are mass assignable.
@@ -25,4 +28,18 @@ class Order extends Model
         'status',
         'total_price',
     ];
+
+    /*
+        relationship with user table
+    */
+    public function user() {
+        $this->belongsTo(User::class);
+    }
+
+    /*
+        interact with the order_item table
+    */
+    public function orderItem() {
+        $this->hasMany(OrderItem::class);
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -21,4 +21,9 @@ class Product extends Model
         'price',
         'stock_quantity'
     ];
+
+    /*relationship with orderItems*/
+    public function orderItem() {
+        $this->belongsTo(OrderItem::class);
+    }
 }
