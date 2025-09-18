@@ -11,4 +11,9 @@ class AdminController extends Controller
 
         return view('admin.dashboard');
     }
+
+    //a function to view all users 
+
+
+    
 }

@@ -19,7 +19,7 @@ class RoleMiddleware
         $user = auth()->user();
 
         if(! $user){
-            return redirect()->route('/login')->with('Unauthorized access', 'Kindly login to access the page');
+            return redirect()->back()->with('Unauthorized access', 'Kindly login to access the page');
         }
 
         if(! in_array($user->role, $roles)) {

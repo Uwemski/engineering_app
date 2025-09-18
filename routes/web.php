@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EngineerController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +28,7 @@ Route::get('/products', function() {
     return view();
 });
 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -41,7 +43,10 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('admin/users', [AdminController::class, 'show'])->name('admin.users');
     //CRUD routes for product goes below
-    Route::post('admin/product/create', [AdminController::class, 'create'])->name('admin.product_create');
+
+    Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
+
+    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 
     //CRUD routes for oders below
     //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
