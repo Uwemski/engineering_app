@@ -39,7 +39,7 @@ class Order extends Model
     /*
         interact with the order_item table
     */
-    public function orderItem() {
+    public function orderItems() {
         $this->hasMany(OrderItem::class);
     }
 }

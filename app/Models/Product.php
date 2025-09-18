@@ -23,7 +23,7 @@ class Product extends Model
     ];
 
     /*relationship with orderItems*/
-    public function orderItem() {
-        $this->belongsTo(OrderItem::class);
+    public function orderItems() {
+        $this->hasMany(OrderItem::class);
     }
 }
