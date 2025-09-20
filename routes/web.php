@@ -45,9 +45,9 @@ Route::middleware(['role:admin'])->group(function () {
     //CRUD routes for product goes below
 
     Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
-
+    
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
-
+    Route::get('product/view', [ProductController::class, 'product_index'])->name('product.index');
     //CRUD routes for oders below
     //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
 

@@ -7,6 +7,14 @@
         
         <h2 class="text-2xl font-bold text-gray-700 mb-6">Create Product</h2>
 
+        @if(session('error'))
+            <div>{{session('error')}}</div>
+        @endif
+
+        @if(session('success'))
+            <div>{{session('success')}}</div>
+        @endif
+
         <!-- Validation Errors  -->
         @if ($errors->any())
             <div class="mb-4 p-4 border-l-4 border-red-500 bg-red-50 text-red-700 rounded">
@@ -25,25 +33,32 @@
             <!-- Name -->
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-600">Product Name</label>
-                <input type="text" name="name" id="name" 
+                <input type="text" name="name" required id="name" 
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
                     placeholder="Enter product name" value="{{ old('name') }}" required>
             </div>
-        
+            <!-- description -->
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-600">Product Description</label>
+                <input type="text" name="description" required id="description" 
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
+                    placeholder="Enter product name" value="{{ old('description') }}" required>
+            </div>
+            
             <!-- Price -->
             <div>
                 <label for="price" class="block text-sm font-medium text-gray-600">Price</label>
-                <input type="number" name="price" id="price" step="0.01"
+                <input type="number" name="price" required id="price" step="0.01"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
                     placeholder="Enter product price" value="{{ old('price') }}" required>
             </div>
 
             <!-- Quantity -->
             <div>
-                <label for="quantity" class="block text-sm font-medium text-gray-600">Quantity</label>
-                <input type="number" name="quantity" id="quantity" min="1"
+                <label for="stock_quantity" class="block text-sm font-medium text-gray-600">Quantity</label>
+                <input type="number" name="stock_quantity" required id="stock_quantity" min="1"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
-                    placeholder="Enter quantity" value="{{ old('quantity') }}" required>
+                    placeholder="Enter quantity" value="{{ old('stock_quantity') }}" required>
             </div>
 
             <!-- Image -->
