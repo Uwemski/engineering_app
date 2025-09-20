@@ -20,14 +20,14 @@
                 <label for="name" class="block text-sm font-medium text-gray-600">Product Name</label>
                 <input type="text" name="name" required id="name" 
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
-                    placeholder="Enter product name" value="{{ old('name') }}" required>
+                    placeholder="Enter product name" value="{{$pro->name}}" required>
             </div>
             <!-- description -->
             <div>
                 <label for="description" class="block text-sm font-medium text-gray-600">Product Description</label>
                 <input type="text" name="description" required id="description" 
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
-                    placeholder="Enter product name" value="{{ old('description') }}" required>
+                    placeholder="Enter product name" value="{{ $pro->description }}" required>
             </div>
             
             <!-- Price -->
@@ -35,7 +35,7 @@
                 <label for="price" class="block text-sm font-medium text-gray-600">Price</label>
                 <input type="number" name="price" required id="price" step="0.01"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
-                    placeholder="Enter product price" value="{{ old('price') }}" required>
+                    placeholder="Enter product price" value="{{ $pro->price}}" required>
             </div>
 
             <!-- Quantity -->
@@ -43,16 +43,16 @@
                 <label for="stock_quantity" class="block text-sm font-medium text-gray-600">Quantity</label>
                 <input type="number" name="stock_quantity" required id="stock_quantity" min="1"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm" 
-                    placeholder="Enter quantity" value="{{ old('stock_quantity') }}" required>
+                    placeholder="Enter quantity" value="{{ $pro->stock_quantity }}" required>
             </div>
 
             <!-- Image -->
-            <div>
+            <!-- <div>
                 <label for="image" class="block text-sm font-medium text-gray-600">Product Image</label>
                 <input type="file" name="image" id="image" 
                     class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200" 
                     accept="image/*">
-            </div>
+            </div> -->
 
             <!-- Submit -->
             <div class="mt-4 ">
