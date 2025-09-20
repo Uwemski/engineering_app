@@ -39,7 +39,7 @@ class ProductController extends Controller
             // To make files in storage/app/public/ accessible via URL, run 'php artisan storage:link'.
             $data['image'] = $path;
             // Store the file path in your database if needed
-            // $model->file_path = $path;
+            // $model->file_path = $path;.
             // $model->save();
         }
 
