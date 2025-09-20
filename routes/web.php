@@ -51,6 +51,7 @@ Route::middleware(['role:admin'])->group(function () {
     //CRUD routes for oders below
     //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
 
+    Route::post('product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
     //a route to view sales[like inventory] will be nice
 });
 

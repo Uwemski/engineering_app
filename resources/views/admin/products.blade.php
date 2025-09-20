@@ -21,18 +21,27 @@
                     <th>Description</th>
                     <th>Price</th>
                     <th>Stock Quantity</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php $serial_no=1?>
                 @foreach($product as $pro)
+                <tr>
                     <td>{{$serial_no}}</td>
                     <td>{{$pro->name}}</td>
                     <td>{{$pro->description}}</td>
                     <td>{{$pro->price}}</td>
                     <td>{{$pro->stock_quantity}}</td>
-
+                    <td>
+                        <form action="{{route('product.edit', $pro->id)}}" method="POST">
+                            @csrf
+                            <button>Edit</button>
+                        </form>
+                    </td>
                     <?php $serial_no++ ?>
+                </tr>
+                    
                 @endforeach
             </tbody>
 

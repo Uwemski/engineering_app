@@ -60,7 +60,15 @@ class ProductController extends Controller
         return view('admin.products', compact('product'));
     }
     //edit product 
+    public function edit($id) {
+        $pro = Product::findOrFail($id);
 
+        if(!$pro) {
+            return redirect()->back()->with('invalid Id', 'invalid Id');
+        }
+
+        return view('admin.edit_product', compact('pro'));
+    }
     //update product
 
     //delete product 
