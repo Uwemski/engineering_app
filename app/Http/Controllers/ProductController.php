@@ -20,14 +20,15 @@ class ProductController extends Controller
 
         $data = $request->validate([
             "name" => "required|min:2|max:50",
-            "description"=> "required|min:2|max:100",
+            "description"=> "required|min:2|max:255",
             "price" => "required|numeric|min:0",
             "stock_quantity" => "required|integer|min:0",
             "image" => "nullable|mimes:jpg,png,jpeg,pdf|max:10025",
         ]);
 
-        //Adviced to strip name and not values
+        //Adviced to strip name,description and not values
        $data['name'] = strip_tags($data['name']);
+       $data['description'] = strip_tags($data['description']);
 
         // dd($data);
 
@@ -70,6 +71,43 @@ class ProductController extends Controller
         return view('admin.edit_product', compact('pro'));
     }
     //update product
+    public function update(Request $request, $id){
+        //check id
+        dd('Lets go');
+        // $product = Product::findOrFail($id);
+        // //validate
+        // $data = $request->validate([
+        //     "name" => "required|min:2|max:50",
+        //     "description"=> "required|min:2|max:255",
+        //     "price" => "required|numeric|min:0",
+        //     "stock_quantity" => "required|integer|min:0",
+        //     "image" => "nullable|mimes:jpg,png,jpeg,pdf|max:10025",
+        // ]);
+        // //strip name and description
+        // $data['name'] = strip_tags($data['name']);
+        // $data['description'] = strip_tags($data['description']);
 
+        // if($request->hasFile('image')){
+        //     $path= $request->file('image')->store('uploads', 'public');
+
+        //     $data['image'] = $path;
+        // }
+
+        // $product->update($data);
+
+        // $product->save();
+        
+    }
     //delete product 
+
+    public function delete($id) {
+        $pro = Product::findOrFail($id);
+
+        $y= $pro->delete();
+        if($y){
+            return redirect()->back()->with('success', 'Product has been deleted successfully');
+        }else{
+            return redirect()->back()->with('error', 'Error encountered, please try again');
+        }
+    }
 }

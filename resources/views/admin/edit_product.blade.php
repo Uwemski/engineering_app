@@ -12,9 +12,9 @@
         @endif
 
         <!-- table -->
-        <form action="" method="POST" enctype="multipart/form-data" class="space-y-6 ml-4">
+        <form action="{{route('product.update', $pro->id)}}" method="POST" enctype="multipart/form-data" class="space-y-6 ml-4">
             @csrf
-
+            @METHOD('PUT')
             <!-- Name -->
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-600">Product Name</label>
@@ -46,7 +46,7 @@
                     placeholder="Enter quantity" value="{{ $pro->stock_quantity }}" required>
             </div>
 
-            <!-- Image -->
+            <!-- Image: How do I handle image update??-->
             <!-- <div>
                 <label for="image" class="block text-sm font-medium text-gray-600">Product Image</label>
                 <input type="file" name="image" id="image" 

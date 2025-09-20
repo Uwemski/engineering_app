@@ -22,6 +22,7 @@
                     <th>Price</th>
                     <th>Stock Quantity</th>
                     <th>Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +38,12 @@
                         <form action="{{route('product.edit', $pro->id)}}" method="POST">
                             @csrf
                             <button>Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{route('product.delete', $pro->id)}}" method="POST">
+                            @csrf
+                            <button>Delete</button>
                         </form>
                     </td>
                     <?php $serial_no++ ?>

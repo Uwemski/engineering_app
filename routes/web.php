@@ -43,15 +43,22 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('admin/users', [AdminController::class, 'show'])->name('admin.users');
     //CRUD routes for product goes below
-
+    //C
     Route::get('product/create', [ProductController::class, 'create'])->name('product.create');
     
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+    //R
     Route::get('product/view', [ProductController::class, 'product_index'])->name('product.index');
-    //CRUD routes for oders below
-    //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
-
+    //U
     Route::post('product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('product/update/{id}', [ProductController::class, 'update'])->name('product.update');
+    //D
+    Route::post('product/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+    //CRUD routes for oders below
+    
+    //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
+    
+    
     //a route to view sales[like inventory] will be nice
 });
 
