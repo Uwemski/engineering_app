@@ -73,32 +73,34 @@ class ProductController extends Controller
     //update product
     public function update(Request $request, $id){
         //check id
-        dd('Lets go');
-        // $product = Product::findOrFail($id);
-        // //validate
-        // $data = $request->validate([
-        //     "name" => "required|min:2|max:50",
-        //     "description"=> "required|min:2|max:255",
-        //     "price" => "required|numeric|min:0",
-        //     "stock_quantity" => "required|integer|min:0",
-        //     "image" => "nullable|mimes:jpg,png,jpeg,pdf|max:10025",
-        // ]);
+        
+        $product = Product::findOrFail($id);
+        //validate
+        $data = $request->validate([
+            "name" => "required|min:2|max:50",
+            "description"=> "required|min:2|max:255",
+            "price" => "required|numeric|min:0",
+            "stock_quantity" => "required|integer|min:0",
+            "image" => "nullable|mimes:jpg,png,jpeg,pdf|max:10025",
+        ]);
         // //strip name and description
-        // $data['name'] = strip_tags($data['name']);
-        // $data['description'] = strip_tags($data['description']);
+        $data['name'] = strip_tags($data['name']);
+        $data['description'] = strip_tags($data['description']);
 
-        // if($request->hasFile('image')){
-        //     $path= $request->file('image')->store('uploads', 'public');
+        // dd($data);
 
-        //     $data['image'] = $path;
-        // }
+        if($request->hasFile('image')){
+            $path= $request->file('image')->store('uploads', 'public');
 
-        // $product->update($data);
+            $data['image'] = $path;
+        }
 
-        // $product->save();
+        $product->update($data);
+
+        $product->save();
         
     }
-    //delete product 
+    //delete product
 
     public function delete($id) {
         $pro = Product::findOrFail($id);
