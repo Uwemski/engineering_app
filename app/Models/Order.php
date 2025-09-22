@@ -23,12 +23,18 @@ class Order extends Model
     const STATUS_COMPLETED = 'completed';
     const STATUS_CANCELLED = 'cancelled';
 
+    const PAYMENT_STATUS_PENDING = 'pending';
+    const PAYMENT_STATUS_PAID = 'paid';
+    const PAYMENT_STATUS_FAILED = 'failed';
+    const PAYMENT_STATUS_REFUNDED = 'refunded';    
+
     protected $fillable = [
         'user_id',
         'status',
         'total_price',
-    ];
-
+        'payment_status',
+        'transaction_reference'
+    ];    
     /*
         relationship with user table
     */
