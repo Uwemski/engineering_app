@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -70,38 +73,66 @@ class ProductController extends Controller
 
         return view('admin.edit_product', compact('pro'));
     }
+
     //update product
-    public function update(Request $request, $id){
-        //check id
-        
+    public function update(Request $request, $id) {
+         //check id
         $product = Product::findOrFail($id);
         //validate
         $data = $request->validate([
-            "name" => "required|min:2|max:50",
-            "description"=> "required|min:2|max:255",
-            "price" => "required|numeric|min:0",
-            "stock_quantity" => "required|integer|min:0",
-            "image" => "nullable|mimes:jpg,png,jpeg,pdf|max:10025",
+            'name'     => 'required|string|min:2|max:50',
+            'price'    => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:0',
+            'image'    => 'nullable|mimes:jpg,jpeg,png,webp|max:10240',
         ]);
-        // //strip name and description
+
+        // sanitize only string fields
         $data['name'] = strip_tags($data['name']);
-        $data['description'] = strip_tags($data['description']);
 
-        // dd($data);
+        // begin transaction
+        DB::beginTransaction();
 
-        if($request->hasFile('image')){
-            $path= $request->file('image')->store('uploads', 'public');
+        try {
+            // handle image upload (if present)
+            if ($request->hasFile('image')) {
+                // stores in storage/app/public/products
+                $path = $request->file('image')->store('products', 'public');
+                $data['image'] = $path;
+            }
 
-            $data['image'] = $path;
+            // create product
+            $product = Product::create($data);
+
+            // if create failed for some reason (rare), throw exception to rollback
+            if (! $product) {
+                throw new \Exception('Product creation returned null/false.');
+            }
+
+            DB::commit();
+
+            return redirect()->route('product.create')->with('success', 'Product created successfully.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            // remove uploaded file if it exists (cleanup)
+            if (! empty($path) && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+
+            // Log detailed error for debugging (not shown to the user)
+            Log::error('Product store failed: '.$e->getMessage(), [
+                'exception' => $e,
+                'input' => $request->except('image'),
+            ]);
+
+            // Return back with old input + friendly error message
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to create product. Please try again or contact support.');
         }
-
-        $product->update($data);
-
-        $product->save();
-        
     }
-    //delete product
 
+    //delete product
     public function delete($id) {
         $pro = Product::findOrFail($id);
 
