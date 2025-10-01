@@ -19,7 +19,9 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'stock_quantity'
+        'stock_quantity',
+        'image'
+
     ];
 
     /*relationship with orderItems*/
