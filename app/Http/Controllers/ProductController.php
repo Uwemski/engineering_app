@@ -63,6 +63,13 @@ class ProductController extends Controller
 
         return view('admin.products', compact('product'));
     }
+
+    public function guestIndex() {
+        $products = Product::latest()->get();
+
+        return view('client.test', compact('products'));
+    }
+    
     //edit product 
     public function edit($id) {
         $pro = Product::findOrFail($id);

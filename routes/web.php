@@ -80,4 +80,6 @@ Route::middleware(['role:client'])->group(function () {
     //profile
 });
 
+Route::get('/guest',[ProductController::class, 'guestIndex']);
+
 require __DIR__.'/auth.php';
