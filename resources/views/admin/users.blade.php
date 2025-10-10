@@ -11,6 +11,9 @@
             <div>{{session('error')}}</div>
         @endif
 
+        @if(session('success'))
+            <div>{{session('success')}}</div>
+        @endif
         <!-- table -->
         <table border="1" class="table-auto">
 
@@ -20,6 +23,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Manage roles</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -31,7 +35,19 @@
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->role}}</td>
-                    
+                    <td>
+                        <form action="{{route('users.edit', $user->id)}}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <select name="role" id="">
+                                <option value="admin" {{$user->role == 'admin' ? 'selected': ''}}>Admin</option>
+                                <option value="engineer" {{$user->role == 'engineer' ? 'selected': ''}}>Engineer</option>
+                                <option value="client" {{$user->role == 'client' ? 'selected': ''}}>Client</option>
+                            </select>
+
+                            <button class="bg-blue-500 text-grey-900 px-4 py-2 rounded hover:bg-blue-600">Modify</button>
+                        </form>
+                    </td>
                     <td>
                         <form action="" method="POST">
                             @csrf

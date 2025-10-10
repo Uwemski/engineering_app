@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EngineerController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -58,7 +59,8 @@ Route::middleware(['role:admin'])->group(function () {
     
     //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
     
-    
+    //a route to update role
+    ROute::put('/admin/update/{id}', [AdminController::class, 'edit'])->name('users.edit');
     //a route to view sales[like inventory] will be nice
 });
 
@@ -81,5 +83,6 @@ Route::middleware(['role:client'])->group(function () {
 });
 
 Route::get('/guest',[ProductController::class, 'guestIndex']);
+Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
 
 require __DIR__.'/auth.php';

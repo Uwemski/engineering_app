@@ -22,5 +22,21 @@ class AdminController extends Controller
         return view('admin.users', compact('users', 'userAmount'));
     }
 
+    //a function to edit roles
+    public function edit(Request $request, $id) {
+        //confirm and find id
+        $user = User::findOrFail($id);
+        //validate
+        $data = $request->validate([
+            'role' => 'required|in:admin,engineer,client' 
+        ]);
+        //update
+        // dd($data);
+
+        $user->update($data);
+        
+        // //redirect back with error message
+        return redirect()->back()->with('success', 'role updated successfully');
+    }
     
 }

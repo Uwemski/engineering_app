@@ -64,6 +64,7 @@ class ProductController extends Controller
         return view('admin.products', compact('product'));
     }
 
+    //a function to ensure visitors view company's product
     public function guestIndex() {
         $products = Product::latest()->get();
 
