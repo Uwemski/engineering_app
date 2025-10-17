@@ -22,7 +22,7 @@ class NewUserRegistered
     public function __construct(User $user)
     {
         //
-        $this->useer = $user;
+        $this->user = $user;
 
     }
 
