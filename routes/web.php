@@ -83,6 +83,10 @@ Route::middleware(['role:client'])->group(function () {
 });
 
 Route::get('/guest',[ProductController::class, 'guestIndex']);
-Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
+Route::POST('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
+Route::get('/cart', [CartController::class, 'cart'])->name('cart');
+Route::POST('/cartUpdate', [CartController::class, 'cartUpdate'])->name('cart.update');
 
+Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::DELETE('/cartDelete/{id}', [CartController::class, 'cartDelete'])->name('cart.delete');
 require __DIR__.'/auth.php';

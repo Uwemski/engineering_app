@@ -10,22 +10,41 @@
         @endif
 
         <ul>
-            <li>
-                <a href="" class="btn btn-primary">
-                   My Cart({{count(session('cart', []))}})
-                </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-             </li>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-shopping-cart"></i> My Cart
+                    <strong>({{ count(session('cart', [])) }})</strong>
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="dropdownMenuButton" style="max-height:300px; overflow-y: auto; width: 400px;">
+                    @if(session('cart', []))
+                        @foreach(session('cart', []) as $key => $value)
+                            <div class="d-flex align-items-center mb-2">
+                                <img
+                                    src="{{ asset('storage/' . $value['image']) }}"
+                                    alt="product image"
+                                    class="me-2"
+                                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;"
+                                >
+                                <p class="dropdown-item flex-grow-1 text-truncate" href="#">
+                                    <strong>{{ $value['name'] }}</strong><br>
+                                    Quantity: {{$value['quantity']}} <br>
+                                    Price: {{$value['price']}}
+                                </p>
+                            </div>
+                        @endforeach
+                        <div class="mb-3 text-center">
+                            <a href="{{route('cart')}}" class="btn btn-info">View All</a>
+                        </div>
+                    @else
+                    <div class="dropdown-item text-center text-muted">
+                        No cart has been added yet!
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            
         </ul>
 
         
@@ -63,27 +82,6 @@
   </div>
   </div>
 </nav>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
@@ -99,24 +97,26 @@
                                             <p class="card-text">{{$product->description}}</p>
                                             <hr>
                                             <p style='font-weight: 500'><strong>&#8358;</strong>{{$product->price}}</p>
-                                            <a href="{{route('add.to.cart', $product->id)}}" class="btn btn-warning">Add to Cart</a>
+                                            
+                                            <form method="POST" action="{{route('add.to.cart', $product->id)}}">
+
+                                            @csrf
+                                                <label for="quantity">Quantity</label>
+                                                <input type="number" name="quantity" id= "quantity" class="form-control" min="1" value="1">
+                                                <button class="btn btn-warning">Add to Cart</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                                 @endforeach
 
                             </div>
-            
-
-       
+                                  
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        
-    
     </div>
 
 

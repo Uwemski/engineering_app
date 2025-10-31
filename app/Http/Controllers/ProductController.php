@@ -71,7 +71,7 @@ class ProductController extends Controller
         return view('client.test', compact('products'));
     }
     
-    //edit product 
+    //edit product
     public function edit($id) {
         $pro = Product::findOrFail($id);
 
