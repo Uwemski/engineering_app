@@ -21,14 +21,15 @@ class OrderItem extends Model
         'quantity',
         'price',
         'order_id',
-        'product_id'
+        'product_id',
+        'subTotal'
     ];
 
     public function order() {
-        $this->belongsTo(Order::class);
+       return $this->belongsTo(Order::class);
     }
 
     public function product() {
-        $this->belongsTo(Product::class);
+       return $this->belongsTo(Product::class);
     }
 }

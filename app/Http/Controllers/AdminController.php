@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -38,5 +40,17 @@ class AdminController extends Controller
         // //redirect back with error message
         return redirect()->back()->with('success', 'role updated successfully');
     }
-    
+
+    public function viewOrders(){
+        //find
+        // $orders= OrderItem::with('order')->get();
+        $orders = Order::with('orderItems.product')
+                    ->where('payment_status', 'paid')
+                    ->get();
+        
+        // dd($orders);
+        return view('admin.orders', compact('orders'));
+
+    }
+
 }

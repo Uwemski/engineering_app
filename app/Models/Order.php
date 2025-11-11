@@ -31,7 +31,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'status',
-        'total_price',
+        'total_amount',
         'payment_status',
         'transaction_reference'
     ];    
@@ -39,13 +39,13 @@ class Order extends Model
         relationship with user table
     */
     public function user() {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     /*
         interact with the order_item table
     */
     public function orderItems() {
-        $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class);
     }
 }

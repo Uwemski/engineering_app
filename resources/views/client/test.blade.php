@@ -9,6 +9,12 @@
             <div class='alert alert-success'>{{session('success')}}</div>
         @endif
 
+        <form action="{{route('product.search')}}" method="POST">
+            @csrf
+
+            <input type="text" name="name" class="form-control mb-1 rounded" placeholder="search for a product">
+            <button class="btn btn-success mb-3">Search</button>
+        </form>
         <ul>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

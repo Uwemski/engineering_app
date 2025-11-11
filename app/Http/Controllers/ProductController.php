@@ -151,4 +151,27 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Error encountered, please try again');
         }
     }
+
+    //a method to search product
+    public function search(Request $request) {
+
+        $data = $request->validate([
+            'name' => 'required|min:2'
+        ]);
+
+        //striptag
+        $data['name']= strip_tags($data['name']);
+
+        /*foreach($data as $key => $val){
+            $data[$key] = strip_tags($val);
+        }*/
+        
+        $in = Product::where("name", "like", "%{$data['name']}%")->get();
+        if ($in->isNotEmpty()){
+            return redirect()->back()->with('success', 'product exist!!');
+        }else{
+            return redirect()->back()->with('error', 'Product doesnt exist');
+        }
+    }
+    
 }

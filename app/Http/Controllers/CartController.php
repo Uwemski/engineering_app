@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 use Illuminate\Http\Request;
 
@@ -10,7 +16,6 @@ class CartController extends Controller
     //
     public function addToCart(Request $request, $id) {
         //find the id
-        // dd(session('cart'));
         $product = Product::findOrFail($id);
 
         //use session helper
@@ -71,13 +76,122 @@ class CartController extends Controller
             
             session(['cart' => $cart]);
         }
-        // $product->delete(); this will most likely delete the produvt from DB and we don't want that
 
-        // return response()->json(["success" => 1]);
+        // return response()->json(["success" => 1]); if we use ajax but i'm having issue with the ajax method
         return redirect()->back()->with('success', 'Item has been deleted successfully');
     }
 
     public function checkout() {
-        dd('kmrmmlmlmlmmpp');
+        
+        $cart = session('cart', []);
+
+        //check if cart is empty
+        if(empty($cart)){
+            return redirect()->route('cart')->with('error', 'cart is empty');
+        }
+
+        return view('cart.checkout', compact('cart'));
+    }
+
+    //a method to process checkout
+    public function checkoutProcess(Request $request) {
+        $cart = session('cart', []);
+        if(empty($cart)){
+            return redirect()->route('cart')->with('error', 'cart is empty');
+        }
+
+        $total = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
+
+        $reference = 'DONPAS_' . Str::upper(Str::random(10));
+
+        // Convert to kobo (Paystack expects amount in kobo)
+        $amountInKobo = $total * 100;
+
+        $order = Order::create([
+            'total_amount' => $total,
+            'status' => 'pending',
+            'payment_status' => 'pending',
+            'user_id' => Auth::id(),
+            'transaction_reference' => $reference
+        ]);
+
+
+        $response = Http::withToken(env('PAYSTACK_SECRET_KEY')) 
+                    ->post(env('PAYSTACK_PAYMENT_URL') . '/transaction/initialize', 
+                    [
+                        'email' =>Auth::user()->email,
+                        'amount' => $amountInKobo,
+                        'reference' => $reference,
+                        'callback_url' => route('payment.callback')
+                    ]);
+
+
+        if(!$response['status']){
+            return redirect()->back()->with('error', 'Unable to initiate payment');
+        }
+
+        return redirect($response['data']['authorization_url']);
+        // Create order items
+        // foreach ($cart as $productId => $details) {
+        //     OrderItem::create([
+        //         'order_id' => $order->id,
+        //         'product_id' => $productId,
+        //         'quantity' => $details['quantity'],
+        //         'price' => $details['price'],
+        //         'total_amount' => $details['quantity'] * $details['price'],
+        //     ]);
+        // }
+
+        // // Clear cart
+        // session()->forget('cart');
+
+        // return redirect()->route('client.cart', $order->id)
+        //                 ->with('success', 'Order placed successfully!');
+
+    }
+
+
+    public function handleGatewayCallback(Request $request){
+        $reference = $request->query('reference');
+
+        $response = Http::withToken(env('PAYSTACK_SECRET_KEY'))->get(
+            env('PAYSTACK_PAYMENT_URL') . "/transaction/verify/{$reference}"
+        )->json();
+
+        if (!$response['status']) {
+            return redirect()->route('cart.index')->with('error', 'Payment verification failed.');
+        }
+
+        $order = Order::where('transaction_reference', $reference)->firstOrFail();
+
+        if ($response['data']['status'] === 'success') {
+            $order->update([
+                'payment_status' => 'paid',
+            ]);
+
+            // Save order items
+            $cart = session('cart', []);
+            foreach ($cart as $productId => $details) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $productId,
+                    'quantity' => $details['quantity'],
+                    'price' => $details['price'],
+                    'subTotal' => $details['quantity'] * $details['price'],
+                ]);
+            }
+
+            session()->forget('cart');
+
+            return redirect()->route('cart.test', $order->id)
+                ->with('success', 'Payment successful!');
+        }
+
+        $order->update([
+            'payment_status' => 'failed',
+            'status' => 'cancelled',
+        ]);
+
+        return redirect()->route('cart.test')->with('error', 'Payment failed or was cancelled.');
     }
 }

@@ -26,6 +26,6 @@ class Product extends Model
 
     /*relationship with orderItems*/
     public function orderItems() {
-        $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class);
     }
 }

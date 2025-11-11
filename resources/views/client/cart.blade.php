@@ -3,7 +3,10 @@
         <h1>View Cart</h1>
     </x-slot-header>
 
-
+    @if(session('error'))
+        <div class="alert alert-warning">{{session('error')}}</div>
+    @endif
+    
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -92,17 +95,7 @@
         }
      })
 
-    //  $.ajax({
-    //     url: "{{route('cart.delete', $key)}}",
-    //     method: "DELETE",
-    //     data: {
-    //         _token: "{{csrf_token() }}",
-    //         product_id: elem.parents('tr').attr('data-id') 
-    //     },
-    //     success: function (response) {
-    //         console.log(response);
-    //     }
-    //  })
+    
 
     });
 </script>

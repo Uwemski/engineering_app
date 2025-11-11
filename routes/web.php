@@ -62,6 +62,10 @@ Route::middleware(['role:admin'])->group(function () {
     //a route to update role
     ROute::put('/admin/update/{id}', [AdminController::class, 'edit'])->name('users.edit');
     //a route to view sales[like inventory] will be nice
+
+
+    //orders crud
+    Route::get('/orders/view', [AdminController::class, 'viewOrders'])->name('orders.view');
 });
 
 //routes for engineer
@@ -82,11 +86,18 @@ Route::middleware(['role:client'])->group(function () {
     //profile
 });
 
-Route::get('/guest',[ProductController::class, 'guestIndex']);
+Route::get('/guest',[ProductController::class, 'guestIndex'])->name('cart.test');
 Route::POST('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
 Route::POST('/cartUpdate', [CartController::class, 'cartUpdate'])->name('cart.update');
 
 Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 Route::DELETE('/cartDelete/{id}', [CartController::class, 'cartDelete'])->name('cart.delete');
+Route::post('cart/processCheckout', [CartController::class, 'checkoutProcess'])->name('cart.process.checkout');
+
+
+Route::get('/payment/callback', [CartController::class, 'handleGatewayCallback'])->name('payment.callback');
+Route::post('/cart/search', [ProductController::class, 'search'])->name('product.search');
+
+//to view order
 require __DIR__.'/auth.php';
