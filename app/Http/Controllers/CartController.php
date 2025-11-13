@@ -131,22 +131,7 @@ class CartController extends Controller
         }
 
         return redirect($response['data']['authorization_url']);
-        // Create order items
-        // foreach ($cart as $productId => $details) {
-        //     OrderItem::create([
-        //         'order_id' => $order->id,
-        //         'product_id' => $productId,
-        //         'quantity' => $details['quantity'],
-        //         'price' => $details['price'],
-        //         'total_amount' => $details['quantity'] * $details['price'],
-        //     ]);
-        // }
-
-        // // Clear cart
-        // session()->forget('cart');
-
-        // return redirect()->route('client.cart', $order->id)
-        //                 ->with('success', 'Order placed successfully!');
+    
 
     }
 
@@ -160,7 +145,7 @@ class CartController extends Controller
 
         if (!$response['status']) {
             return redirect()->route('cart.index')->with('error', 'Payment verification failed.');
-        }
+        } 
 
         $order = Order::where('transaction_reference', $reference)->firstOrFail();
 

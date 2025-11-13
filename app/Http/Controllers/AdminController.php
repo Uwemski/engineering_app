@@ -50,7 +50,27 @@ class AdminController extends Controller
         
         // dd($orders);
         return view('admin.orders', compact('orders'));
-
     }
 
+    //function to  update status of an order
+    public function updateOrderStatus(Request $request, $id) {
+        // dd('ssasasa');
+        $order = Order::findOrFail($id);
+        
+        $data = $request->validate([
+            "status" => "required|in:pending,in_production,completed,delivered" 
+        ]);
+
+        // dd($data ); working like Saka
+        $s = $order->update($data);
+
+        $order->save();
+        
+        if($s) {
+            return redirect()->back()->with('success', 'order status updated successfully');
+        } else {
+            return redirect()->back()->with('error', 'Error encountered, please try again!');
+        }
+
+    }
 }

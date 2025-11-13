@@ -63,9 +63,10 @@ Route::middleware(['role:admin'])->group(function () {
     ROute::put('/admin/update/{id}', [AdminController::class, 'edit'])->name('users.edit');
     //a route to view sales[like inventory] will be nice
 
-
     //orders crud
     Route::get('/orders/view', [AdminController::class, 'viewOrders'])->name('orders.view');
+
+    Route::POST('/orders/update/{id}', [AdminController::class, 'updateOrderStatus'])->name('order.update');
 });
 
 //routes for engineer
