@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         View Users
     </x-slot>
@@ -63,4 +63,4 @@
         </table>
 
     </div>
-</x-app-layout>
+</x-admin-layout>

@@ -80,7 +80,7 @@
     <div class="sidebar" id="sidebar">
         <h4 class="text-center py-3">ADMIN PANEL</h4>
 
-        <a href="">
+        <a href="{{route('dashboard')}}">
             Dashboard
         </a>
 

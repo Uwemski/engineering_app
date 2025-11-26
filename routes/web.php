@@ -33,8 +33,16 @@ Route::get('/products', function() {
 
 //components.admin-layout
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+//temporary
+// Route::get('/dashboard', function () {
+//     return view('admin.quotations');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -68,6 +76,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/orders/view', [AdminController::class, 'viewOrders'])->name('admin.orders.show');
 
     Route::POST('/orders/update/{id}', [AdminController::class, 'updateOrderStatus'])->name('order.update');
+
+    //a route for admin to view quotation
+    Route::get('admin/quotations', [AdminController::class, 'show_quotations'])->name('quotations.show');
 });
 
 //routes for engineer
@@ -90,6 +101,10 @@ Route::middleware(['role:client'])->group(function () {
     //history
     Route::get('client/order/view-history', [ClientController::class, 'orderHistory'])->name('client.order.view-history');
     //profile
+
+    //QuotationController //both client and admin
+    Route::get('/client/quotation', [QuotationController::class, 'index'])->name('quotaion.index');
+    Route::post('/client/quotation', [QuotationController::class, 'store'])->name('quotation.store');
 });
 
 //it's not good that these routes are not grouped and not controlled for security purposes. Find way to fix that
@@ -104,17 +119,11 @@ Route::post('cart/processCheckout', [CartController::class, 'checkoutProcess'])-
 
 
 Route::get('/payment/callback', [CartController::class, 'handleGatewayCallback'])->name('payment.callback');
-Route::post('/cart/search', [ProductController::class, 'search'])->name('product.search');
+Route::post('/product/search', [ProductController::class, 'search'])->name('product.search');
 
 //this route is for the enquiry section of the index or a hyperlink to contact the company
 Route::get('/contact-page', [EnquiryController::class, 'index'])->name('enquiry.index');
 Route::post('guest/contact-us', [EnquiryController::class, 'store'])->name('enquiry.store');
 
-//QuotationController //both client and admin
-Route::get('/client/quotation', [QuotationController::class, 'index'])->name('quotaion.index');
-Route::post('/client/quotation', [QuotationController::class, 'store'])->name('quotation.store');
 
-
-//a route for admin to view quotation
-Route::get('admin/quotations', [AdminController::class, 'showQuotations'])->name('quotations.show');
 require __DIR__.'/auth.php';

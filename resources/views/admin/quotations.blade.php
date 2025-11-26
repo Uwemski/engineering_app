@@ -1,19 +1,19 @@
 <x-admin-layout>
     
 
-
-
     <div class="container">
         <div class="row">
             <table>
-                <tr>
-                    <thead>
+                <thead>
+                    <tr>
+                    
                         <th>S/N</th>
                         <th>Subject</th>
                         <th>Description</th>
-                        <th>Price</th>
-                    </thead>
-                </tr>
+                        <th>Price</th>   
+                    </tr>
+                </thead>
+                
                 <tbody>
                     @foreach($quotations as $quotes)
                     <tr>                    

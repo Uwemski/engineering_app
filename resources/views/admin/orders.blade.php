@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-admin-layout>
     <x-slot name="header">
         View Orders
     </x-slot-header>
@@ -60,4 +60,4 @@
         </div>
     </div>
 
-</x-guest-layout>
+</x-admin-layout>
