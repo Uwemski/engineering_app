@@ -78,7 +78,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::POST('/orders/update/{id}', [AdminController::class, 'updateOrderStatus'])->name('order.update');
 
     //a route for admin to view quotation
-    Route::get('admin/quotations', [AdminController::class, 'show_quotations'])->name('quotations.show');
+    Route::get('admin/quotations', [AdminController::class, 'show_quotations'])->name('admin.quotations.show');
+
+    Route::get('admin/messages', [AdminController::class, 'show_enquiries'])->name('admin.enquiries.show');
 });
 
 //routes for engineer

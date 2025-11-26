@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         Edit Product
     </x-slot>
@@ -64,4 +64,4 @@
         </form>
 
     </div>
-</x-app-layout>
+</x-admin-layout>

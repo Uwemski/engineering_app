@@ -84,6 +84,12 @@
             Dashboard
         </a>
 
+        <a href="{{route('product.create')}}">
+            Create Products
+        </a>
+        <a href="{{route('product.index')}}">
+            View Product
+        </a>
         <a href="{{route('admin.users')}}">
             Manage Users
         </a>
@@ -92,11 +98,11 @@
             Manage Orders
         </a>
 
-        <a href="{{route('quotations.show')}}">
+        <a href="{{route('admin.quotations.show')}}">
             Quotations
         </a>
 
-        <a href="">
+        <a href="{{route('admin.enquiries.show')}}">
             Contact Messages
         </a>
 

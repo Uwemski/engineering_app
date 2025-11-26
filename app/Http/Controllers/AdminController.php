@@ -75,11 +75,19 @@ class AdminController extends Controller
 
     }
 
+    //method to view quote requests
     public function show_quotations(){
 
-        $quotations = Quotation::with('user')
-                        ->get();
+        $quotations = Quotation::all();
 
         return view('admin.quotations', compact('quotations'));
     }
+
+    //method to view enquiries
+    public function show_enquiries() {
+        $enquiries = Enquiry::all();
+
+        return view('admin.enquiries', compact('enquiries'));
+    }
+
 }

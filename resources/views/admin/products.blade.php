@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         View Product
     </x-slot>
@@ -55,4 +55,4 @@
         </table>
 
     </div>
-</x-app-layout>
+</x-admin-layout>

@@ -18,12 +18,12 @@
                         $serial_no = 1;
                     ?> 
 
-                    @foreach($quotations as $quotes)
+                    @foreach($enquiries as $enq)
                     <tr>                    
                         <td>{{$serial_no}}</td>
-                        <td>{{$quotes->subject}}</td>
-                        <td>{{$quotes->description}}</td>
-                        <td>{{$quotes->quotation_price}}</td>
+                        <td>{{$enq->name}}</td>
+                        <td>{{$enq->email}}</td>
+                        <td>{{$enq->message}}</td>
                     </tr>
                     <?php $serial_no ++?>
                     @endforeach
