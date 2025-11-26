@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Order;
+use app\Models\Quotation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,19 +10,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewOrderNotification extends Mailable
+class NewQuotationNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $order;
-    
-    public function __construct(Order $order)
+    public $quotation;
+    public function __construct(Quotation $quotation)
     {
         //
-        $this->order = $order;
+        $this->quotation = $quotation;
     }
 
     /**
@@ -31,7 +30,7 @@ class NewOrderNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Notify Admin Order',
+            subject: 'New Quotation Notification',
         );
     }
 
@@ -41,8 +40,8 @@ class NewOrderNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.new_order_notification',
-            with: ['order' => $this->order]
+            view: 'emails.new_quote_notification',
+            with: ['quotation' => $this->quotation]
         );
     }
 

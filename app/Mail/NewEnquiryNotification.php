@@ -2,7 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\Order;
+use App\Models\Enquiry;
+use App\Listeners\EnquiryListener;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,19 +11,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewOrderNotification extends Mailable
+class NewEnquiryNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $order;
-    
-    public function __construct(Order $order)
+    public $enquiry; 
+    public function __construct(Enquiry $enquiry)
     {
         //
-        $this->order = $order;
+        $this->enquiry = $enquiry;
     }
 
     /**
@@ -31,7 +31,7 @@ class NewOrderNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Notify Admin Order',
+            subject: 'New Enquiry Notification',
         );
     }
 
@@ -41,8 +41,8 @@ class NewOrderNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.new_order_notification',
-            with: ['order' => $this->order]
+            view: 'guest.email',
+            with: ['enquiry' => $this->enquiry]
         );
     }
 
