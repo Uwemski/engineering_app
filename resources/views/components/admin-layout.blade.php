@@ -84,20 +84,16 @@
             Dashboard
         </a>
 
-        <a href="">
+        <a href="{{route('admin.users')}}">
             Manage Users
         </a>
 
-        <a href="">
+        <a href="{{route('admin.orders.show')}}">
             Manage Orders
         </a>
 
-        <a href="">
+        <a href="{{route('quotations.show')}}">
             Quotations
-        </a>
-
-        <a href="">
-            Waste Types
         </a>
 
         <a href="">

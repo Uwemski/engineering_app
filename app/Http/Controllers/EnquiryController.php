@@ -38,10 +38,10 @@ class EnquiryController extends Controller
         event(new EnquiryCreated($enquiry));
 
         Log::info('=== ENQUIRY EVENT FIRED ===', [
-    'name' => $enquiry->name,
-    'email' => $enquiry->email,
-    'subject' => $enquiry->message
-]);
+            'name' => $enquiry->name,
+            'email' => $enquiry->email,
+            'subject' => $enquiry->message
+        ]);
 
 
         //success message

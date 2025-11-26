@@ -7,6 +7,8 @@ use App\Http\Controllers\EngineerController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\QuotationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,7 +31,7 @@ Route::get('/products', function() {
     return view();
 });
 
-
+//components.admin-layout
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -55,7 +57,6 @@ Route::middleware(['role:admin'])->group(function () {
     Route::put('product/update/{id}', [ProductController::class, 'update'])->name('product.update');
     //D
     Route::post('product/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
-    //CRUD routes for oders below
     
     //Route::get('admin/orders', [AdminController::class, 'index'])->name('admin.orders');
     
@@ -64,7 +65,7 @@ Route::middleware(['role:admin'])->group(function () {
     //a route to view sales[like inventory] will be nice
 
     //orders crud
-    Route::get('/orders/view', [AdminController::class, 'viewOrders'])->name('orders.view');
+    Route::get('/orders/view', [AdminController::class, 'viewOrders'])->name('admin.orders.show');
 
     Route::POST('/orders/update/{id}', [AdminController::class, 'updateOrderStatus'])->name('order.update');
 });
@@ -84,9 +85,14 @@ Route::middleware(['role:client'])->group(function () {
     Route::get('client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
     //orders 
     Route::post('client/order', [ClientController::class, 'create'])->name('client.order');
+    //view order
+    Route::get('client/order/view', [ClientController::class, 'viewOrder'])->name('client.order.view');
+    //history
+    Route::get('client/order/view-history', [ClientController::class, 'orderHistory'])->name('client.order.view-history');
     //profile
 });
 
+//it's not good that these routes are not grouped and not controlled for security purposes. Find way to fix that
 Route::get('/guest',[ProductController::class, 'guestIndex'])->name('cart.test');
 Route::POST('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add.to.cart');
 Route::get('/cart', [CartController::class, 'cart'])->name('cart');
@@ -100,5 +106,15 @@ Route::post('cart/processCheckout', [CartController::class, 'checkoutProcess'])-
 Route::get('/payment/callback', [CartController::class, 'handleGatewayCallback'])->name('payment.callback');
 Route::post('/cart/search', [ProductController::class, 'search'])->name('product.search');
 
-//to view order
+//this route is for the enquiry section of the index or a hyperlink to contact the company
+Route::get('/contact-page', [EnquiryController::class, 'index'])->name('enquiry.index');
+Route::post('guest/contact-us', [EnquiryController::class, 'store'])->name('enquiry.store');
+
+//QuotationController //both client and admin
+Route::get('/client/quotation', [QuotationController::class, 'index'])->name('quotaion.index');
+Route::post('/client/quotation', [QuotationController::class, 'store'])->name('quotation.store');
+
+
+//a route for admin to view quotation
+Route::get('admin/quotations', [AdminController::class, 'showQuotations'])->name('quotations.show');
 require __DIR__.'/auth.php';

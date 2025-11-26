@@ -5,9 +5,11 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Events\NewOrderRegistered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
@@ -114,7 +116,15 @@ class CartController extends Controller
             'user_id' => Auth::id(),
             'transaction_reference' => $reference
         ]);
-
+        
+        $order->load('user');
+        ///event listener
+        event(new NewOrderRegistered($order));
+        Log::info('=== ORDER EVENT FIRED ===', [
+    'order_id' => $order->id,
+    'total' => $order->total_amount,
+    'email' => Auth::user()->email
+]);
 
         $response = Http::withToken(env('PAYSTACK_SECRET_KEY')) 
                     ->post(env('PAYSTACK_PAYMENT_URL') . '/transaction/initialize', 
@@ -131,8 +141,6 @@ class CartController extends Controller
         }
 
         return redirect($response['data']['authorization_url']);
-    
-
     }
 
 
@@ -157,7 +165,7 @@ class CartController extends Controller
             // Save order items
             $cart = session('cart', []);
             foreach ($cart as $productId => $details) {
-                OrderItem::create([
+                $orderItem= OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $productId,
                     'quantity' => $details['quantity'],

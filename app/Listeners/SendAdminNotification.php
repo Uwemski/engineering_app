@@ -4,11 +4,11 @@ namespace App\Listeners;
 
 use App\Mail\NewUserNotification;
 use App\Events\NewUserRegistered;
-use App\Events\NewOrderRegistered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
-class SendAdminNotification
+class SendAdminNotification implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -24,9 +24,8 @@ class SendAdminNotification
     public function handle(object $event): void
     {
         //event for new user notification
-        Mail::to('iconuwemfrank@gmail.com')->send(New NewUserNotification ($event -> user) );
+        Mail::to('iconuwemfrank@gmail.com')->send(New NewUserNotification($event -> user) );
 
         //
-        Mail::to('iconuwemfrank@gmail.com')->send(New NotifyAdminOrder ($event -> order));
     }
 }

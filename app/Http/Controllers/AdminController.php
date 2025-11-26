@@ -5,6 +5,8 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
+use App\Models\Enquiry;
+use App\Models\Quotation;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -42,13 +44,12 @@ class AdminController extends Controller
     }
 
     public function viewOrders(){
-        //find
         // $orders= OrderItem::with('order')->get();
         $orders = Order::with('orderItems.product')
                     ->where('payment_status', 'paid')
+                    ->latest()
                     ->get();
         
-        // dd($orders);
         return view('admin.orders', compact('orders'));
     }
 
@@ -72,5 +73,13 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Error encountered, please try again!');
         }
 
+    }
+
+    public function show_quotations(){
+
+        $quotations = Quotation::with('user')
+                        ->get();
+
+        return view('admin.quotations', compact('quotations'));
     }
 }

@@ -10,11 +10,12 @@
     <p>Hello Admin,</p>
     <p>A new order has been created, Details:</p>
     <ul>
-        <li>Name: {{$user->name}}</li>
-        <li>Email: {{$user->email}}</li>
-        <li>Date: {{$user->created_at}}</li>
+        <li>amount: {{$order->total_amount}}</li>
+        <li>Payment Status: {{$order->payment_status}}</li>
+        <li>Date: {{$order->created_at}}</li>
     </ul>
 
+    <p>Please do the necessary, thank you</p>
     <p>Best regards, DONPASS Company Ltd</p>
 </body>
 </html>

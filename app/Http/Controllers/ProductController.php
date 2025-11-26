@@ -19,8 +19,6 @@ class ProductController extends Controller
     //PRODUCT CRUD
     //create product
     public function store(Request $request) {
-        // dd('Mastery is thhe goal'); working 
-
         $data = $request->validate([
             "name" => "required|min:2|max:50",
             "description"=> "required|min:2|max:255",
@@ -30,8 +28,8 @@ class ProductController extends Controller
         ]);
 
         //Adviced to strip name,description and not values
-       $data['name'] = strip_tags($data['name']);
-       $data['description'] = strip_tags($data['description']);
+        $data['name'] = strip_tags($data['name']);
+        $data['description'] = strip_tags($data['description']);
 
         // dd($data);
 
@@ -161,17 +159,21 @@ class ProductController extends Controller
 
         //striptag
         $data['name']= strip_tags($data['name']);
-
-        /*foreach($data as $key => $val){
-            $data[$key] = strip_tags($val);
-        }*/
         
-        $in = Product::where("name", "like", "%{$data['name']}%")->get();
-        if ($in->isNotEmpty()){
-            return redirect()->back()->with('success', 'product exist!!');
-        }else{
+        $products = Product::where("name", "like", "%{$data['name']}%")->get();
+        // dd($products);
+
+        if ($products ->isEmpty() ) {
             return redirect()->back()->with('error', 'Product doesnt exist');
         }
+        
+        return view('client.test', compact('products'));
+        //this is wrong, the products needs to be passed
+        // if ($in->isNotEmpty()){
+        //     return redirect()->back()->with('success', 'product exist!!');
+        // }else{
+        //     return redirect()->back()->with('error', 'Product doesnt exist');
+        // }
     }
     
 }

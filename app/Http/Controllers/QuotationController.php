@@ -6,7 +6,7 @@ use App\Models\Quotation;
 use App\Events\QuotationCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class QuotationController extends Controller
 {
