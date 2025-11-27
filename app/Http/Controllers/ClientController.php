@@ -28,12 +28,12 @@ class ClientController extends Controller
         return view('client.orders', compact('orders'));
     }
 
+    //this logic is not excellent
     public function orderHistory() {
 
         $id = Auth::user()->id;
 
         $orders = Order::where('user_id', $id)
-                    ->where('payment_status', 'pending')
                     ->with('orderItems.product')
                     ->get();
     

@@ -1,10 +1,10 @@
-<x-guest-layout>
+<x-client-layout>
     <x-slot name="header">
 
     </x-slot-header>
 
     <div class="container">
-        <div class="row">
+        <div class="row mb-4" style="margin-top: 3rem">
             <form action="{{route('quotation.store')}}" method="post">
                 @csrf
                 <div class="mb-3">
@@ -39,4 +39,4 @@
         </div>
     </div>
 
-</x-guest-layout>
+</x-client-layout>

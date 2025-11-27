@@ -21,26 +21,35 @@ class AdminController extends Controller
     public function show() {
         $userAmount = User::count();
 
-        $users = User::all();
+        $users = User::paginate(10);
 
         return view('admin.users', compact('users', 'userAmount'));
     }
 
-    //a function to edit roles
+    //a function to edit roles ['faulty']
     public function edit(Request $request, $id) {
+        // dd('iiiisisisis');
+        
         //confirm and find id
         $user = User::findOrFail($id);
-        //validate
+        // //validate
         $data = $request->validate([
             'role' => 'required|in:admin,engineer,client' 
         ]);
         //update
         // dd($data);
 
-        $user->update($data);
-        
+        $u = $user->update([
+            'role' => $data['role']
+        ]);
+
+        dd($u);
+        // if($u){
+        //     return redirect()->back()->with('success', 'order status updated successfully');
+        // } else {
+        //     return redirect()->back()->with('error', 'Error encountered, please try again!');
+        // }
         // //redirect back with error message
-        return redirect()->back()->with('success', 'role updated successfully');
     }
 
     public function viewOrders(){
@@ -48,7 +57,7 @@ class AdminController extends Controller
         $orders = Order::with('orderItems.product')
                     ->where('payment_status', 'paid')
                     ->latest()
-                    ->get();
+                    ->simplePaginate(10);
         
         return view('admin.orders', compact('orders'));
     }
@@ -77,15 +86,15 @@ class AdminController extends Controller
 
     //method to view quote requests
     public function show_quotations(){
-
-        $quotations = Quotation::all();
+        $quotations = Quotation::latest()->simplePaginate(2);
 
         return view('admin.quotations', compact('quotations'));
+        // dd($quotations);
     }
 
     //method to view enquiries
     public function show_enquiries() {
-        $enquiries = Enquiry::all();
+        $enquiries = Enquiry::latest()->simplePaginate();
 
         return view('admin.enquiries', compact('enquiries'));
     }

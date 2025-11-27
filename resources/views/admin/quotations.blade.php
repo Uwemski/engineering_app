@@ -1,6 +1,6 @@
 <x-admin-layout>
     
-
+    
     <div class="container">
         <div class="row">
             <table border='1' class="ttable table-hover">
@@ -30,6 +30,7 @@
                 </tbody>
 
             </table>
+            {{$quotations->links()}}
         </div>
     </div>
 

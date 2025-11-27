@@ -31,16 +31,6 @@ Route::get('/products', function() {
     return view();
 });
 
-//components.admin-layout
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-//temporary
-// Route::get('/dashboard', function () {
-//     return view('admin.quotations');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 
 
 
@@ -51,7 +41,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['role:admin'])->group(function () {
-    Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('admin/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::get('admin/users', [AdminController::class, 'show'])->name('admin.users');
     //CRUD routes for product goes below
     //C
@@ -95,7 +85,7 @@ Route::middleware(['role:engineer'])->group(function () {
 
 Route::middleware(['role:client'])->group(function () {
     //dashboard
-    Route::get('client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
+    Route::get('/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
     //orders 
     Route::post('client/order', [ClientController::class, 'create'])->name('client.order');
     //view order
@@ -105,7 +95,7 @@ Route::middleware(['role:client'])->group(function () {
     //profile
 
     //QuotationController //both client and admin
-    Route::get('/client/quotation', [QuotationController::class, 'index'])->name('quotaion.index');
+    Route::get('/client/quotation', [QuotationController::class, 'index'])->name('quotation.index');
     Route::post('/client/quotation', [QuotationController::class, 'store'])->name('quotation.store');
 });
 

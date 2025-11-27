@@ -30,6 +30,7 @@
                 </tbody>
 
             </table>
+            {{$enquiries->links()}}
         </div>
     </div>
 

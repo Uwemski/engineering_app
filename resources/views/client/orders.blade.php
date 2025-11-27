@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-client-layout>
     <x-slot name="header">
         <h1>View Orders</h1>
     </x-slot-header>
@@ -41,4 +41,4 @@
         </div>
     </div>
 
-</x-app-layout>
+</x-client-layout>

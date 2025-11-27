@@ -28,34 +28,37 @@
                     </thead>
                     
                     <tbody>
-                        @foreach($orders as $d)
+                        <?php $serial_no= 1 ?>
+                        @foreach($orders as $order)
                         <tr>
-                            <td>S/N</td> 
-                            <td>@foreach($d->orderItems as $o)
+                            <td>{{$serial_no}}</td> 
+                            <td>@foreach($order->orderItems as $o)
                                     {{$o->product->name}}
                                     (x {{$o->quantity}})
                                 @endforeach
                             </td>
-                            <td>{{$d['total_amount']}}</td>
-                            <td>{{$d['payment_status']}}</td>
-                            <td>{{$d['status']}}</td>
+                            <td>{{$order['total_amount']}}</td>
+                            <td>{{$order['payment_status']}}</td>
+                            <td>{{$order['status']}}</td>
                             <td>
-                                <form action="{{route('order.update', $d->id)}}" method="post" class="d-flex">
+                                <form action="{{route('order.update', $order->id)}}" method="post" class="d-flex">
                                     @csrf
                                     <select name="status" id="status" class="form-select">
-                                        <option value="pending" {{$d->status == 'pending' ? 'selected' : ''  }}>PENDING</option>
-                                        <option value="in_production" {{$d->status == 'in_production' ? 'selected' : ''  }}>IN_PRODUCTION</option>
-                                        <option value="completed" {{$d->status == 'completed' ? 'selected' : ''  }}>COMPLETED</option>
-                                        <option value="delivered" {{$d->status == 'delivered' ? 'selected' : ''  }}>DELIVERED</option>
+                                        <option value="pending" {{$order->status == 'pending' ? 'selected' : ''  }}>PENDING</option>
+                                        <option value="in_production" {{$order->status == 'in_production' ? 'selected' : ''  }}>IN_PRODUCTION</option>
+                                        <option value="completed" {{$order->status == 'completed' ? 'selected' : ''  }}>COMPLETED</option>
+                                        <option value="delivered" {{$order->status == 'delivered' ? 'selected' : ''  }}>DELIVERED</option>
                                     </select>
 
                                     <button class="btn btn-success">Update</button>
                                 </form>
                             </td>
-                        </tr>
+                        </tr> 
+                        <?php $serial_no ++?>
                         @endforeach
                     </tbody>
                 </table>
+                {{$orders->links()}}
             </div>
         </div>
     </div>
