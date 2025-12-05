@@ -1,6 +1,5 @@
 <x-admin-layout>
     
-    
     <div class="container">
         <div class="row">
             <table border='1' class="ttable table-hover">
@@ -10,6 +9,7 @@
                         <th>Subject</th>
                         <th>Description</th>
                         <th>Price(&#8358;)</th>   
+                        <th>Action</th>
                     </tr>
                 </thead>
                 
@@ -24,6 +24,7 @@
                         <td>{{$quotes->subject}}</td>
                         <td>{{$quotes->description}}</td>
                         <td>{{$quotes->quotation_price}}</td>
+                        <td><a href="{{route('admin.edit.quotation', $quotes->id)}}">Edit</a></td>
                     </tr>
                     <?php $serial_no ++?>
                     @endforeach

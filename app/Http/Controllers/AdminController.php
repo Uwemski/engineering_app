@@ -13,8 +13,11 @@ class AdminController extends Controller
 {
     //dashboard page
     public function index(){
+        $user_amount = User::count();
+        $order_amount = Order::with('orderItems')->count();
+        $product = Product::count();
 
-        return view('admin.dashboard');
+        return view('admin.dashboard', compact('user_amount', 'order_amount', 'product'));
     }
 
     //a function to view all users 
@@ -28,8 +31,6 @@ class AdminController extends Controller
 
     //a function to edit roles ['faulty']
     public function edit(Request $request, $id) {
-        // dd('iiiisisisis');
-        
         //confirm and find id
         $user = User::findOrFail($id);
         // //validate
@@ -37,7 +38,6 @@ class AdminController extends Controller
             'role' => 'required|in:admin,engineer,client' 
         ]);
         //update
-        // dd($data);
 
         $u = $user->update([
             'role' => $data['role']
@@ -90,6 +90,28 @@ class AdminController extends Controller
 
         return view('admin.quotations', compact('quotations'));
         // dd($quotations);
+    }
+
+    //update quotation
+    public function edit_quotation($id) {
+        // dd('dijr');
+
+        return view('admin.edit-quotations');
+    }
+
+    public function update_quotation(Request $request, $id) {
+        dd($id);
+        // $quote = Quotation::findOrFail($id);
+
+        // $data = $request->validate([
+        //     'admin_message' => 'required|min:5'
+        // ]);
+
+        // $data['admin_message'] = strip_tags($data['admin_message']);
+
+        // $quote->update($data);
+
+        // return redirect()->route('admin/quotations')->with('success', 'message sent successfully');
     }
 
     //method to view enquiries
