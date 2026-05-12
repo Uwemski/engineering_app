@@ -114,12 +114,12 @@ Route::middleware(['role:client'])->group(function () {
 Route::get('/guest',[ProductController::class, 'guestIndex'])->name('cart.test');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
-Route::POST('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::POST('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::POST('/cartUpdate', [CartController::class, 'cartUpdate'])->name('cart.update');
+Route::POST('/cartUpdate', [CartController::class, 'update'])->name('cart.update');
 
 Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-Route::DELETE('/cartDelete/{id}', [CartController::class, 'cartDelete'])->name('cart.delete');
+Route::DELETE('/cartDelete/{id}', [CartController::class, 'remove'])->name('cart.delete');
 Route::post('cart/processCheckout', [PaymentController::class, 'checkoutProcess'])->name('cart.process.checkout');
 
 Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback'])->name('payment.callback');

@@ -10,40 +10,29 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Services\CartService;
 
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    //
-    public function addToCart(Request $request, $id) {
 
-        
+    protected $cartService;
+
+    public function __construct(Cartservice $cartService){
+        $this->cartService = $cartService;
+    }
+    
+
+    public function add(Request $request, $id)
+    {    
         // find the id
         $product = Product::findOrFail($id);
 
-        //use session helper
-        
-        $cart = session('cart', []);
-
         $quantity = $request->input('quantity', 1); 
-        if(isset($cart[$id]) ){
-            $cart[$id]['quantity'] += $quantity;
-        }else {
-            $cart[$id] = [
-                'name' => $product->name,
-                'quantity' => $quantity,
-                'price' => $product->price,
-                'image' => $product->image, 
-                'description' => $product->description
-            ];
-        }
         
-        // dd($cart);
-
-        // Add or update the product in the cart
-        session()->put('cart', $cart);
-
+        $this->cartService->add($product, $quantity);
+    
         return redirect()->back()->with('success', 'Product added successfully');//anything after return doesn't work
     }
 
@@ -53,38 +42,32 @@ class CartController extends Controller
     }
 
     //a method to update cart
-    public function cartUpdate(Request $request) {
+    public function update(Request $request) {
 
-        info($request->all());
+        // info($request->all());
 
-        $cart = session('cart');
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'nullable|integer|min:1'
+        ]);
 
-        $cart[$request->product_id]['quantity'] = $request->quantity;
-    
-        session()->put('cart', $cart);
+        $this->cartService->update($validated['product_id'], $validated['quantity']);
 
-        return response()->json(["success" => 1]);
+        return redirect()->back()->with('success', 'Cart updated!');
     }
 
     //a method to delete cart
-    public function cartDelete($id){
-        //find product
+    public function remove($id){
     
-        $product = Product::findOrFail($id);
-
-        $cart = session('cart');
-
-        //check if the product is in session  
-        if(isset($cart[$id])){
-            unset($cart[$id]);
-            
-            session(['cart' => $cart]);
-        }
-
+        $this->cartService->remove($id);
         // return response()->json(["success" => 1]); if we use ajax but i'm having issue with the ajax method
         return redirect()->back()->with('success', 'Item has been deleted successfully');
     }
 
+    public function clear(){
+        $this->cartService->clear();
+        return redirect()->route('cart.test')->with('succes', 'Cart cleared successfully');
+    }
     public function checkout() {
         
         $cart = session('cart', []);
