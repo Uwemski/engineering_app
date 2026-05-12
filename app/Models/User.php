@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Order;
 use App\Models\Quotation;
 
+
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -54,5 +56,9 @@ class User extends Authenticatable
 
     public function quotations() {
         return $this->hasMany(Quotation::class);
+    }
+
+    public function isAdmin() {
+        return in_array($this->role, ['admin','superadmin']);
     }
 }

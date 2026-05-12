@@ -83,7 +83,9 @@
         <a href="{{route('dashboard')}}">
             Dashboard
         </a>
-
+        <a href="{{route('category.index')}}">
+            Create Category
+        </a>
         <a href="{{route('product.create')}}">
             Create Products
         </a>

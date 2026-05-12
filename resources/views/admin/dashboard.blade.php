@@ -17,7 +17,7 @@
             <div class="card mt-4 bg-primary mx-1" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">Number Of Registerd Products</h5>
-                    <p class="card-text text-center" style="font-size: 3rem; font-weight: 700">{{$products}}</p>
+                    <p class="card-text text-center" style="font-size: 3rem; font-weight: 700">{{$product}}</p>
                             {{-- <a href="#" class="card-link">Card link</a>
                             <a href="#" class="card-link">Another link</a> --}}
                 </div>

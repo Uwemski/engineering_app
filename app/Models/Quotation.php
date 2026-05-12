@@ -19,7 +19,11 @@ class Quotation extends Model
         'attachment',
         'admin_message',
         'status',
-        'quotation_price'
+        'quotation_price',
+        'contact_name', 
+        'company_name',
+        'email', 'phone', 'material', 'quantity', 'required_date',
+        'reference', 'token',
     ];
 
     public function users() {

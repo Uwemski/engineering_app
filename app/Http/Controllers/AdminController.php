@@ -64,7 +64,6 @@ class AdminController extends Controller
 
     //function to  update status of an order
     public function updateOrderStatus(Request $request, $id) {
-        // dd('ssasasa');
         $order = Order::findOrFail($id);
         
         $data = $request->validate([
@@ -86,16 +85,13 @@ class AdminController extends Controller
 
     //method to view quote requests
     public function show_quotations(){
-        $quotations = Quotation::latest()->simplePaginate(2);
+        $quotations = Quotation::latest()->simplePaginate(8);
 
         return view('admin.quotations', compact('quotations'));
-        // dd($quotations);
     }
 
     //update quotation
     public function edit_quotation($id) {
-        // dd('dijr');
-
         return view('admin.edit-quotations');
     }
 
@@ -116,7 +112,7 @@ class AdminController extends Controller
 
     //method to view enquiries
     public function show_enquiries() {
-        $enquiries = Enquiry::latest()->simplePaginate();
+        $enquiries = Enquiry::latest()->simplePaginate(10);
 
         return view('admin.enquiries', compact('enquiries'));
     }

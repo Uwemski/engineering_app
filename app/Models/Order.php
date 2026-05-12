@@ -33,8 +33,13 @@ class Order extends Model
         'status',
         'total_amount',
         'payment_status',
-        'transaction_reference'
+        'transaction_reference',
+        'cart_snapshot'
     ];    
+
+    protected $casts = [
+        'cart_snapshot' => 'array',
+    ];
     /*
         relationship with user table
     */

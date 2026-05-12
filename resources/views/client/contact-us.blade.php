@@ -12,8 +12,9 @@
                 @else(session('error'))
                     <div class="alert alert-warning">{{session('error')}}</div>
                 @endif
+                <div id="resultDiv" class='mb-3'></div>
 
-                <form action="{{route('enquiry.store')}}" method="POST">
+                <form id="contactForm" action="{{route('enquiry.store')}}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="Name">Name</label>
@@ -37,11 +38,45 @@
                         <small style="color: red">{{$message}}</small>
                     @enderror
                     <div class="text-center">
-                        <button class="btn btn-primary">Contact us</button>
+                        <button type="submit" class="btn btn-primary">Contact us</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script>
 
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(this);
+            const messageDiv = document.getElementById('resultDiv');
+
+            fetch(form.action, {
+                method: form.method,
+                'headers':{
+                    'x-csrf-token': '{{csrf_token()}}',
+                },
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status:', response.status)
+                return response.json()
+            })
+            .then(data => {
+                if(data.success) {
+                    messageDiv.innerHTML = `<p style='color:green'>${data.message}</p>`
+                    this.reset();
+                }else{
+                    messageDiv.innerHTML = `<p style='color:red'>${data.error}</p>`
+                }
+                
+            })
+            .catch(error => {
+                console.error(error)
+                messageDiv.innerHTML = `<p style='color:red'>Something went wrong</p>`
+            })
+        })
+    </script>
 </x-guest-layout>

@@ -1,130 +1,156 @@
 <x-guest-layout>
-    <x-slot name="header">
-        <h1>Products for guest</h1>
-    </x-slot>
 
+    {{-- Top Navigation --}}
+    <nav class="bg-slate-900 border-b border-slate-700 fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
 
-    <div class="container">
-        @if(session('success'))
-            <div class='alert alert-success'>{{session('success')}}</div>
-        @endif
-
-        <form action="{{route('product.search')}}" method="POST">
-            @csrf
-
-            <input type="text" name="name" class="form-control mb-1 rounded" placeholder="search for a product">
-            <button class="btn btn-success mb-3">Search</button>
-        </form>
-        <ul>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-shopping-cart"></i> My Cart
-                    <strong>({{ count(session('cart', [])) }})</strong>
-                </button>
-
-                <div class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="dropdownMenuButton" style="max-height:300px; overflow-y: auto; width: 400px;">
-                    @if(session('cart', []))
-                        @foreach(session('cart', []) as $key => $value)
-                            <div class="d-flex align-items-center mb-2">
-                                <img
-                                    src="{{ asset('storage/' . $value['image']) }}"
-                                    alt="product image"
-                                    class="me-2"
-                                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;"
-                                >
-                                <p class="dropdown-item flex-grow-1 text-truncate" href="#">
-                                    <strong>{{ $value['name'] }}</strong><br>
-                                    Quantity: {{$value['quantity']}} <br>
-                                    Price: {{$value['price']}}
-                                </p>
-                            </div>
-                        @endforeach
-                        <div class="mb-3 text-center">
-                            <a href="{{route('cart')}}" class="btn btn-info">View All</a>
-                        </div>
-                    @else
-                    <div class="dropdown-item text-center text-muted">
-                        No cart has been added yet!
+                {{-- Brand --}}
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 bg-amber-500 rounded-md flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M8 4h8l-1 1v5l5 5c1 1 0 3-2 3H6c-2 0-3-2-2-3l5-5V5L8 4z"/>
+                        </svg>
                     </div>
-                    @endif
+                    <span class="text-white font-semibold text-lg tracking-wide">
+                        EngineerCraft
+                    </span>
                 </div>
-            </div>
 
-            
-        </ul>
+                {{-- Right Side --}}
+                <div class="flex items-center space-x-6">
 
-        
+                    <a href="#" class="hidden md:block text-slate-300 hover:text-white">
+                        Products
+                    </a>
 
-<nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-  <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-      <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo">
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-  </a>
-  <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Get started</button>
-      <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-  </div>
-  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-    <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-      <li>
-        <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
-      </li>
-      <li>
-        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
-      </li>
-      <li>
-        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</a>
-      </li>
-      <li>
-        <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-      </li>
-    </ul>
-  </div>
-  </div>
-</nav>
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-body">
-                            <div class="row">
-                                @foreach($products as $product)
-                                <div class="col-md-3">
-                                    <div class="card" style="width: 18rem;">
-                                        <img class="card-img-top" src="{{asset('storage/'. $product->image)}}" alt="Card image cap">
-                                        <div class="card-body">
-                                            <h1 style='font-size: 1.5rem; font-weight: 600'>{{$product->name}}</h1><hr>
-                                            <p class="card-text">{{$product->description}}</p>
-                                            <hr>
-                                            <p style='font-weight: 500'><strong>&#8358;</strong>{{$product->price}}</p>
-                                            
-                                            <form method="POST" action="{{route('add.to.cart', $product->id)}}">
+                    {{-- Cart --}}
+                    <a href="{{ route('cart') }}"
+                       class="relative flex items-center space-x-2 text-slate-300 hover:text-white">
 
-                                            @csrf
-                                                <label for="quantity">Quantity</label>
-                                                <input type="number" name="quantity" id= "quantity" class="form-control" min="1" value="1">
-                                                <button class="btn btn-warning">Add to Cart</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M3 3h2l.4 2M7 13h10l4-8H5.4"/>
+                        </svg>
 
-                            </div>
-                                  
-                        </div>
-                    </div>
+                        @if(count(session('cart', [])) > 0)
+                            <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                {{ count(session('cart', [])) }}
+                            </span>
+                        @endif
+
+                        <span class="hidden sm:block">Cart</span>
+                    </a>
+
                 </div>
             </div>
         </div>
+    </nav>
+
+    {{-- Page Wrapper --}}
+    <div class="pt-24 pb-16 bg-slate-100 min-h-screen">
+
+        <div class="max-w-7xl mx-auto px-6">
+
+            {{-- Page Header --}}
+            <div class="mb-10">
+                <h1 class="text-3xl font-bold text-slate-800">
+                    Engineering Equipment Catalog
+                </h1>
+                <p class="text-slate-600 mt-2">
+                    Industrial-grade tools and precision machinery.
+                </p>
+            </div>
+
+            {{-- Search --}}
+            <div class="mb-8">
+                <form action="{{ route('product.search') }}" method="POST"
+                      class="flex flex-col sm:flex-row gap-4">
+                    @csrf
+                    <input type="text"
+                           name="name"
+                           placeholder="Search tools, machines, parts..."
+                           class="flex-1 px-4 py-3 rounded-md border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+
+                    <button type="submit"
+                            class="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-md font-medium">
+                        Search
+                    </button>
+                </form>
+            </div>
+
+            {{-- Products Grid --}}
+           @if($products->count() > 0)
+    <div class="space-y-4">
+
+@foreach($products as $product)
+
+    <div class="bg-white border border-slate-200 rounded-md p-4 hover:shadow-sm transition">
+
+        <div class="flex gap-4 items-start">
+
+            {{-- Small Fixed Image --}}
+            <div class="w-28 h-28 flex-shrink-0 bg-slate-100 rounded overflow-hidden">
+                <img src="{{ asset('storage/' . $product->image) }}"
+                     alt="{{ $product->name }}"
+                     class="w-full h-full object-cover">
+            </div>
+
+            {{-- Product Info --}}
+            <div class="flex-1">
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-1">
+                    {{ $product->name }}
+                </h3>
+
+                <p class="text-sm text-slate-600 mb-3 leading-snug">
+                    {{ $product->description }}
+                </p>
+
+                <div class="flex items-center justify-between flex-wrap gap-3">
+
+                    <div class="text-xl font-bold text-slate-900">
+                        ₦{{ number_format($product->price) }}
+                    </div>
+
+                    <form method="POST"
+                          action="{{ route('add.to.cart', $product->id) }}"
+                          class="flex items-center gap-2">
+
+                        @csrf
+
+                        <input type="number"
+                               name="quantity"
+                               min="1"
+                               value="1"
+                               class="w-16 border border-slate-300 rounded px-2 py-1 text-sm text-center focus:ring-1 focus:ring-amber-500 focus:outline-none">
+
+                        <button type="submit"
+                                class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1.5 text-sm rounded">
+                            Add
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
+@endforeach
 
+</div>
+
+@endif
+
+
+        </div>
+    </div>
 
 </x-guest-layout>

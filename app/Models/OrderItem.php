@@ -11,7 +11,7 @@ use App\Models\Product;
 class OrderItem extends Model
 {
     //
-     use HasFactory, Notifiable;
+     use HasFactory;
     /**
      * The attributes that are mass assignable.
      *

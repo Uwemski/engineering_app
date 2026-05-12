@@ -23,7 +23,7 @@ class EnquiryController extends Controller
         $data = $request->validate([
             'name' => 'required|min:2|max:25',
             'email' => 'required',
-            'message' => 'required'
+            'message' => 'required',
         ]);
 
         //strip_tags
@@ -46,9 +46,17 @@ class EnquiryController extends Controller
 
         //success message
         if($enquiry){
-            return redirect()->back()->with('success', 'Message sent successfully');
+            //return redirect()->back()->with('success', 'Message sent successfully');
+            return response()->json([
+                'success'=> true,
+                'message'=>'message has been sent successfully!'
+            ]);
         }else{
-            return redirect()->back()->with('error', 'Error, please try again!');
+            // return redirect()->back()->with('error', 'Error, please try again!');
+            return response()->json([
+                'success'=> false,
+                'error'=>'Something went wrong, try again!'
+            ]);
         }
     }
 

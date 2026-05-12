@@ -5,59 +5,71 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Category;
+use App\Http\Requests\StoreProductRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
+    //a function to show a product
+    public function show(Product $product) 
+    {
+        $product->load('category');
+        return view('products.show', compact('product'));
+    }
+
     //a function to return view
     public function create() {
-        return view('admin.create_product');
+        //this is not best practice
+        $categories = Category::all();
+
+        return view('admin.create_product', compact('categories'));
     }
 
     //PRODUCT CRUD
     //create product
-    public function store(Request $request) {
-        $data = $request->validate([
-            "name" => "required|min:2|max:50",
-            "description"=> "required|min:2|max:255",
-            "price" => "required|numeric|min:0",
-            "stock_quantity" => "required|integer|min:0",
-            "image" => "nullable|mimes:jpg,png,jpeg,pdf|max:10025",
-        ]);
+   public function store(StoreProductRequest $request)
+    {
+        // dd($request);
 
-        //Adviced to strip name,description and not values
-        $data['name'] = strip_tags($data['name']);
-        $data['description'] = strip_tags($data['description']);
+        //use try-catch here to get catch errors and move validation request for cleaner controller
+        $data = $request->validated();
 
-        // dd($data);
+        $slug = Str::slug($data['name']);
 
-        if($request->hasFile('image')) {
-            $path = $request->file('image')->store('uploads', 'public');
-            // The 'uploads' directory will be created inside storage/app/ by default.
-            // You can also specify a different disk, e.g., Storage::disk('public')->putFile('uploads', $request->file('file_input_name'));
-            // The 'public' disk stores files in storage/app/public/.
-            // To make files in storage/app/public/ accessible via URL, run 'php artisan storage:link'.
-            $data['image'] = $path;
-            // Store the file path in your database if needed
-            // $model->file_path = $path;.
-            // $model->save();
+        $count = Product::where('slug', "$slug")
+                ->orWhere('slug', 'LIKE', "{$slug}-%")
+                ->count();
+        //add it
+        if($count > 0){
+            $slug = $slug . '-' . ($count + 1);
         }
 
-        //save
-        $product = Product::create($data);
-        if($product){
-            return redirect()->back()->with('success', 'product has been uploaded successfully');
-        }else{
-            return redirect()->back()->with('error', 'Error encountered, please try again!');
-        }
+        $data['slug'] = $slug;
+        $imagePath = null;
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+        }
+        $data['image'] = $imagePath;
+        
+        Product::create($data);
+
+        return redirect()->back()->with('success', 'Product created successfully');
     }
 
     //read product
     public function product_index() {
-        $product = Product::all();
+        $product = Product::with('category')->paginate(10);
+
+        if($product->isEmpty()) {
+            return view('admin.products')
+                ->with('product', $product)
+                ->with('empty', 'Products are empty at the moment');
+        }
 
         return view('admin.products', compact('product'));
     }
@@ -66,7 +78,8 @@ class ProductController extends Controller
     public function guestIndex() {
         $products = Product::latest()->get();
 
-        return view('client.test', compact('products'));
+        
+        return view('products', compact('products'));
     }
     
     //edit product
@@ -74,10 +87,18 @@ class ProductController extends Controller
         $pro = Product::findOrFail($id);
 
         if(!$pro) {
-            return redirect()->back()->with('invalid Id', 'invalid Id');
+            // return redirect()->back()->with('invalid Id', 'invalid Id');
+            return response()->json([
+                'success' => false,
+                'message' => "Invalid id, product doesn't exist"
+            ]);
         }
 
-        return view('admin.edit_product', compact('pro'));
+        return response()->json([
+            'success' => true,
+            'data' => $pro
+        ]);
+        // return view('admin.edit_product', compact('pro'));
     }
 
     //update product
@@ -86,9 +107,10 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         //validate
         $data = $request->validate([
-            'name'     => 'required|string|min:2|max:50',
-            'price'    => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
+            'name' => 'required|string|min:2|max:50',
+            'description' => 'required|string|min:3|max:70',
+            'price' => 'required|numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
             'image'    => 'nullable|mimes:jpg,jpeg,png,webp|max:10240',
         ]);
 
@@ -102,21 +124,24 @@ class ProductController extends Controller
             // handle image upload (if present)
             if ($request->hasFile('image')) {
                 // stores in storage/app/public/products
+                 if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
+                }
                 $path = $request->file('image')->store('products', 'public');
                 $data['image'] = $path;
             }
 
             // create product
-            $product = Product::create($data);
-
-            // if create failed for some reason (rare), throw exception to rollback
-            if (! $product) {
-                throw new \Exception('Product creation returned null/false.');
-            }
+            $product->update($data);
 
             DB::commit();
 
-            return redirect()->route('product.create')->with('success', 'Product created successfully.');
+            // return redirect()->route('product.create')->with('success', 'Product created successfully.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully!',
+                'data' => $product
+            ]);
         } catch (\Throwable $e) {
             DB::rollBack();
 
@@ -132,9 +157,10 @@ class ProductController extends Controller
             ]);
 
             // Return back with old input + friendly error message
-            return back()
-                ->withInput()
-                ->with('error', 'Failed to create product. Please try again or contact support.');
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to create product. Please try again or contact support.'
+            ]);
         }
     }
 

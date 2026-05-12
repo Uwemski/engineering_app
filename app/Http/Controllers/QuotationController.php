@@ -11,51 +11,60 @@ use App\Models\User;
 class QuotationController extends Controller
 {
     //method to view index
-    public function index() {
+    public function create() {
         // dd('jddjujdj');
         return view('client.quotation');
     }
 
     public function store(Request $request) {
 
-        $data = $request->validate([
-            'subject' => 'required|min:5|max:50',
-            'description' => 'required|min:5|max:200',
-            'file' => 'mimes:jpg,png,pdf,jpeg,docx|max:10024',
-            'quotation_price' => "required|numeric|min:0|max:99999999"
-        ]);
+        dd($request);
+        // $data = $request->validate([
+        //     'subject' => 'required|min:5|max:50',
+        //     'description' => 'required|min:5|max:200',
+        //     'file' => 'mimes:jpg,png,pdf,jpeg,docx|max:10024',
+        //     'quotation_price' => "required|numeric|min:0|max:99999999"
+        // ]);
 
-        // dd($data);
-        foreach($data as $d => $v ){
-            $data[$d] = strip_tags($v);
-        }
-        // $data['subject'] = strip_tags($data['subject']);
-        // $data['description'] = strip_tags($data['description']);
-        // $data['quotation_price'] = strip_tags($data['quotation_price']);
+        // // dd($data);
+        // foreach($data as $d => $v ){
+        //     $data[$d] = strip_tags($v);
+        // }
+        // // $data['subject'] = strip_tags($data['subject']);
+        // // $data['description'] = strip_tags($data['description']);
+        // // $data['quotation_price'] = strip_tags($data['quotation_price']);
 
-        $data['user_id'] = auth()->id();
-        // dd($data);
-        if($request->hasFile('file')){
-            $path = $request->file('file')->store('uploads', 'public');
+        // $data['user_id'] = auth()->id();
+        // // dd($data);
+        // if($request->hasFile('file')){
+        //     $path = $request->file('file')->store('uploads', 'public');
 
-            $data['file'] = $path;
-        }
+        //     $data['file'] = $path;
+        // }
 
-        $quote = Quotation::create([
-            'subject' => $request->subject,
-            'description' => $request->description,
-            'quotation_price' => $request->quotation_price,
-            'user_id' => Auth::id(),
-        ]);
+        // $quote = Quotation::create([
+        //     'subject' => $request->subject,
+        //     'description' => $request->description,
+        //     'quotation_price' => $request->quotation_price,
+        //     'user_id' => Auth::id(),
+        // ]);
 
-        event(new QuotationCreated($quote));
+        // event(new QuotationCreated($quote));
 
-        Log::info("---Event Fired");
+        // Log::info("---Event Fired");
 
-        if($quote){
-            return redirect()->back()->with("Success", "Quotation has been sent successfully");
-        }else {
-            return redirect()->back()->with("Error", "Error encountered, please try again");
-        }
+        // if($quote){
+        //     // return redirect()->back()->with("Success", "Quotation has been sent successfully");
+        //     return response()->json([
+        //         'success' => true,
+        //         'message' => 'Quotation has been sent successfully'
+        //     ]);
+        // }else {
+        //     return response()->json([
+        //         'success' => false,
+        //         'error' => 'Error encountered, please try again'
+        //     ]);
+        //     // return redirect()->back()->with("Error", "Error encountered, please try again");
+        // }
     }
 }
