@@ -38,7 +38,10 @@ class CartController extends Controller
 
     public function index(){
 
-        return view('client.cart');
+        $cart = $this->cartService->getCart();
+        $subtotal = $this->cartService->subtotal();
+        $count = $this->cartService->count();
+        return view('client.cart', compact('cart', 'subtotal', 'count'));
     }
 
     //a method to update cart
@@ -68,15 +71,17 @@ class CartController extends Controller
         $this->cartService->clear();
         return redirect()->route('cart.test')->with('succes', 'Cart cleared successfully');
     }
+
     public function checkout() {
-        
-        $cart = session('cart', []);
+        $cart = $this->cartService->getCart();
+        $itemCount = $this->cartService->count();
+        $subtotal = $this->cartService->subtotal();
 
         //check if cart is empty
         if(empty($cart)){
-            return redirect()->route('cart')->with('error', 'cart is empty');
+            return redirect()->route('cart.test')->with('error', 'cart is empty');
         }
 
-        return view('cart.checkout', compact('cart'));
+        return view('cart.checkout', compact('cart', 'subtotal', 'itemCount'));
     }
 }

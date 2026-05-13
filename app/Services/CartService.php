@@ -72,8 +72,23 @@ class CartService
        session()->put('cart', $cart);
     }
     
+    public function getCartCollection()
+    {
+        return collect($this->getCart());
+    }
+
     public function count()
     {
+        return $this->getCartCollection()->sum('quantity');
+    }
+
+    public function total()
+    {
         
+    }
+
+    public function subtotal()
+    {
+        return $this->getCartCollection()->sum(fn($item)=> $item['price'] * $item['quantity']);
     }
 }

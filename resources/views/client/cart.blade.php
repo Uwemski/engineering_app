@@ -112,9 +112,7 @@
               </tr>
             </thead>
             <tbody>
-              @php $total = 0; @endphp
-              @foreach(session('cart') as $key => $data)
-                @php $total += $data['price'] * $data['quantity']; @endphp
+              @foreach($cart as $key => $data)
                 <tr data-id="{{ $key }}">
                   <td>
                     @if(!empty($data['image']))
@@ -127,8 +125,8 @@
                   </td>
                   <td><div class="cart-prod-name">{{ $data['name'] }}</div></td>
                   <td><div class="cart-price">₦{{ number_format($data['price'], 2) }}</div></td>
-                  <td><input type="number" class="qty-input quantity" value="{{ $data['quantity'] }}" min="1"></td>
-                  <td><div class="cart-subtotal">₦{{ number_format($data['price'] * $data['quantity'], 2) }}</div></td>
+                  <td><input type="number" class="qty-input quantity" value="{{ $count }}" min="1"></td>
+                  <td><div class="cart-subtotal">₦{{ number_format($subtotal, 2) }}</div></td>
                   <td>
                     <form action="{{ route('cart.delete', $key) }}" method="POST">
                       @csrf @method('DELETE')
@@ -155,11 +153,9 @@
       </div>
 
       {{-- Order Summary --}}
-      @if(session('cart') && count(session('cart')) > 0)
+      @if($cart && count($cart) > 0)
         @php
-          $itemCount = array_sum(array_column(session('cart'), 'quantity'));
-          $total = 0;
-          foreach(session('cart') as $item) { $total += $item['price'] * $item['quantity']; }
+          foreach($cart as $item)
         @endphp
         <div class="order-summary">
           <div class="summary-header">
@@ -168,11 +164,11 @@
           <div class="summary-body">
             <div class="summary-row">
               <span class="summary-row-label">Items</span>
-              <span class="summary-row-val">{{ $itemCount }}</span>
+              <span class="summary-row-val">{{ $count }}</span>
             </div>
             <div class="summary-row">
               <span class="summary-row-label">Subtotal</span>
-              <span class="summary-row-val">₦{{ number_format($total, 2) }}</span>
+              <span class="summary-row-val">₦{{ number_format($subtotal, 2) }}</span>
             </div>
             <div class="summary-row">
               <span class="summary-row-label">Shipping</span>
@@ -181,7 +177,7 @@
           </div>
           <div class="summary-total">
             <span class="summary-total-label">Total</span>
-            <span class="summary-total-val">₦{{ number_format($total, 2) }}</span>
+            <span class="summary-total-val">₦{{ number_format($subtotal, 2) }}</span>
           </div>
           <div class="summary-actions">
             @auth
